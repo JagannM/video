@@ -1,3 +1,4 @@
+const bcrypt = require("bcrypt");
 const _ = require("lodash");
 const { User, validate } = require("../models/user_model.js");
 const mongoose = require("mongoose");
@@ -21,6 +22,9 @@ router.post("/", async (req, res) => {
   }); */
   //or create object with loadash pick method filter
   user = new User(_.pick(req.body, ["name", "email", "password"]));
+  //hashing the password with salt
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(user.password, salt);
   //save the user to db
   await user.save();
   //send response to client
