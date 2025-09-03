@@ -1,3 +1,5 @@
+const config = require("config");
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const _ = require("lodash");
 const { User, validate } = require("../models/user_model.js");
@@ -33,7 +35,14 @@ router.post("/", async (req, res) => {
     email: user.email,
   }); */
   //or use lodash pick method
-  res.send(_.pick(user, ["_id", "name", "email"]));
+  //res.send(_.pick(user, ["_id", "name", "email"]));
+
+  //or send token with res header
+  //const token = jwt.sign({ _id: user._id }, config.get("jwtPrivateKey"));
+  const token = user.generateAuthToken();
+  res
+    .header("x-auth-token", token)
+    .send(_.pick(user, ["_id", "name", "email"]));
 });
 
 module.exports = router;

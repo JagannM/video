@@ -1,3 +1,4 @@
+const config = require("config");
 const mongoose = require("mongoose");
 const customers = require("./routes/customer_route.js");
 const genres = require("./routes/genres_route.js");
@@ -8,6 +9,12 @@ const auth = require("./routes/auth.js");
 const express = require("express");
 const app = express();
 const Joi = require("joi");
+
+if (!config.get("jwtPrivateKey")) {
+  console.error("FATAL ERROR: jwtPrivateKey is not defined");
+  process.exit(1); //0 means success
+}
+
 mongoose
   .connect("mongodb://localhost/video")
   .then(() => console.log("Connected to MongoDB..."))
