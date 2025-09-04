@@ -1,3 +1,4 @@
+const author = require("../middleware/author.js");
 const { Genre, validate } = require("../models/genres_model.js");
 const mongoose = require("mongoose");
 const express = require("express");
@@ -10,7 +11,7 @@ router.get("/", async (req, res) => {
   res.send(genres);
 });
 
-router.post("/", async (req, res) => {
+router.post("/", author, async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
