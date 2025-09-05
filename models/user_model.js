@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-//add a method to userSchema which returns an object to which we can add key-value pairs
+//add a method to userSchema which returns an object to which we can add key-value pairs //This method belongs to the user object
 userSchema.methods.generateAuthToken = function () {
   const token = jwt.sign({ _id: this._id }, config.get("jwtPrivateKey"));
   return token;

@@ -7,7 +7,13 @@ const mongoose = require("mongoose");
 const express = require("express");
 const router = express.Router();
 const Joi = require("joi");
+const author = require("../middleware/author.js");
 router.use(express.json());
+
+router.get("/me", author, async (req, res) => {
+  const user = await User.findById(req.user._id).select("-password");
+  res.send(user);
+});
 
 router.post("/", async (req, res) => {
   //input validation
