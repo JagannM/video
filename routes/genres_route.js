@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const express = require("express");
 const router = express.Router();
 const Joi = require("joi");
+const admincheck = require("../middleware/admincheck.js");
 router.use(express.json());
 
 router.get("/", async (req, res) => {
@@ -39,7 +40,7 @@ router.put("/:id", async (req, res) => {
   res.send(genre);
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", [author, admincheck], async (req, res) => {
   const genre = await Genre.findByIdAndDelete(req.params.id);
 
   if (!genre)

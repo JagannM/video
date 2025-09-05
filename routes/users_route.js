@@ -29,7 +29,7 @@ router.post("/", async (req, res) => {
     password: req.body.password,
   }); */
   //or create object with loadash pick method filter
-  user = new User(_.pick(req.body, ["name", "email", "password"]));
+  user = new User(_.pick(req.body, ["name", "email", "password", "isAdmin"]));
   //hashing the password with salt
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);
@@ -48,7 +48,7 @@ router.post("/", async (req, res) => {
   const token = user.generateAuthToken();
   res
     .header("x-auth-token", token)
-    .send(_.pick(user, ["_id", "name", "email"]));
+    .send(_.pick(user, ["_id", "name", "email", "isAdmin"]));
 });
 
 module.exports = router;
