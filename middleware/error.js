@@ -1,3 +1,5 @@
 module.exports = function (err, req, res, next) {
-  res.status(500).send("Something Failed. msg from middleware");
+  res.status(500).send("Something Failed. Db not connected");
 };
+
+//this middleware handles the rejected promises error
