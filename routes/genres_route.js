@@ -8,7 +8,7 @@ const Joi = require("joi");
 const admincheck = require("../middleware/admincheck.js");
 router.use(express.json());
 
-router.get(
+/*router.get(
   "/",
   asyncMiddleware(async (req, res) => {
     const genres = await Genre.find().sort("name");
@@ -27,7 +27,21 @@ router.post(
     genre = await genre.save();
     res.send(genre);
   })
-);
+);*/
+
+router.get("/", async (req, res) => {
+  const genres = await Genre.find().sort("name");
+  res.send(genres);
+});
+
+router.post("/", author, async (req, res) => {
+  const { error } = validate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  let genre = new Genre({ name: req.body.name });
+  genre = await genre.save();
+  res.send(genre);
+});
 
 router.put("/:id", async (req, res) => {
   const { error } = validate(req.body);
