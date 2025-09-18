@@ -6,6 +6,7 @@ const express = require("express");
 const router = express.Router();
 const Joi = require("joi");
 const admincheck = require("../middleware/admincheck.js");
+const error = require("../middleware/error.js");
 router.use(express.json());
 
 /*router.get(
@@ -30,6 +31,7 @@ router.post(
 );*/
 
 router.get("/", async (req, res) => {
+  throw new Error("could not get the genres");
   const genres = await Genre.find().sort("name");
   res.send(genres);
 });
