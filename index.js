@@ -13,9 +13,20 @@ const express = require("express");
 const app = express();
 const Joi = require("joi");
 
-process.on('uncaughtException',(ex)=>{
+/* process.on('uncaughtException',(ex)=>{
   console.log('WE GOT AN UNCAUGHT EXCEPTION');
   winston.error(ex.message,ex);
+}); */
+
+winston.exceptions.handle(new winston.transports.File({ filename: "uncaughtExceptions.log" }));
+
+/* process.on('unhandledRejection',(ex)=>{
+  console.log('WE GOT AN UNCAUGHT REJECTION');
+  winston.error(ex.message,ex);
+}); */
+
+process.on('unhandledRejection',(ex)=>{
+  throw ex;
 });
 
 winston.add(new winston.transports.File({ filename: "logfile.log" }));
@@ -26,7 +37,10 @@ winston.add(
   })
 );
 
-throw new Errror('Something failed during startup');
+//throw new Errror('Something failed during startup'); //uncaught exception
+
+const p = Promise.reject(new Error("Something failed miserably"));
+p.then(()=>console.log('Done'));
 
 if (!config.get("jwtPrivateKey")) {
   console.error("FATAL ERROR: jwtPrivateKey is not defined");
