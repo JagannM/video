@@ -13,6 +13,11 @@ const express = require("express");
 const app = express();
 const Joi = require("joi");
 
+process.on('uncaughtException',(ex)=>{
+  console.log('WE GOT AN UNCAUGHT EXCEPTION');
+  winston.error(ex.message,ex);
+});
+
 winston.add(new winston.transports.File({ filename: "logfile.log" }));
 winston.add(
   new winston.transports.MongoDB({
@@ -20,6 +25,8 @@ winston.add(
     collection: "log",
   })
 );
+
+throw new Errror('Something failed during startup');
 
 if (!config.get("jwtPrivateKey")) {
   console.error("FATAL ERROR: jwtPrivateKey is not defined");
